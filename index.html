@@ -1,0 +1,67 @@
+<!-- player.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf8">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+  <link rel="stylesheet" href="https://cdn.lineicons.com/5.0/lineicons.css" />
+
+  <link rel="stylesheet" href="player.css">
+</head>
+<body>
+    <div class="player">
+        <div class="cover">
+            <img src="logo.jpg" alt="">
+        </div>
+        <div class="info">
+            <div class="title">Autumn</div>
+            <div class="singer">Instrumental Music</div>
+        </div>
+        <div class="volume-box">
+            <span class="volume-down"><i class="material-icons">remove</i></span>
+            <input type="range" class="volume-range" step="1" value="80" min="0" max="100"
+                oninput="music.volume = this.value/100">
+            <span class="volume-up"><i class="material-icons">add</i></span>
+        </div>
+        <div class="btn-box">
+           
+            <i class="lni lni-volume-1" onclick=handleVolume()></i>
+        </div>
+        <div class="music-box">
+            <input type="range" step="1" class="seekbar" value="0" min="0" max="100" oninput="handleSeekBar()">
+
+            <audio class="music-element">
+                <source id="55" src="https://uk24freenew.listen2myradio.com/live.mp3?typeportmount=s1_14899_stream_954921676" type="audio/mp3">
+            </audio>
+            <span class="current-time">0:0</span><span class="duration">0:0</span>
+            <span class="play" onclick="handlePlay()">
+                <i class="lni lni-play"></i>
+            </span>
+        </div>
+    </div>
+    <script src="player.js"></script>
+    <script>
+      function startLiveUpdate() {
+        const playerz = document.getElementById(55);
+
+        setInterval(function() {
+            fetch("http://localhost:4000/api/hawaslink").then(function (reaponse) {
+                return reaponse.json();
+            }).then(function (data) {
+                playerz.setAttribute("src", data.link)
+
+                console.log(data.link);
+            }).catch(function (error) {
+                console.log('Request failed', error);
+        });
+            }, 5000);
+
+        }
+          
+        document.addEventListener('DOMContentLoaded', function () {
+            startLiveUpdate();});
+    </script>
+
+</body>
+</html>
+
